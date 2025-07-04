@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, TYPOGRAPHY } from '../theme/colors';
+import EnhancedButton from './EnhancedButton';
 
 interface EmptyStateProps {
   icon: keyof typeof MaterialIcons.glyphMap;
@@ -27,14 +28,14 @@ export default function EmptyState({
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.message}>{message}</Text>
       {showAction && onAction && (
-        <Button 
-          mode="contained" 
+        <EnhancedButton
+          title={actionLabel}
           onPress={onAction}
+          variant="gradient"
+          gradientType="primary"
           style={styles.button}
-          labelStyle={styles.buttonLabel}
-        >
-          {actionLabel}
-        </Button>
+          textStyle={styles.buttonLabel}
+        />
       )}
     </View>
   );
@@ -64,8 +65,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   button: {
-    backgroundColor: COLORS.celeste,
-    borderRadius: 8,
+    borderRadius: 12,
     paddingHorizontal: SPACING.lg,
   },
   buttonLabel: {

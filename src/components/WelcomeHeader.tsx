@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Surface, Title, Paragraph, Chip } from 'react-native-paper';
+import { Title, Paragraph, Chip } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, SHADOWS } from '../theme/colors';
+import EnhancedCard from './EnhancedCard';
 
 interface WelcomeHeaderProps {
   title: string;
@@ -30,7 +31,12 @@ export default function WelcomeHeader({
   });
 
   return (
-    <Surface style={[styles.container, SHADOWS.medium]} elevation={3}>
+    <EnhancedCard
+      variant="glass"
+      style={StyleSheet.flatten([styles.container, SHADOWS.medium])}
+      icon="dashboard"
+      iconColor={COLORS.celeste}
+    >
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Title style={styles.title}>{title}</Title>
@@ -65,14 +71,14 @@ export default function WelcomeHeader({
           </View>
         )}
       </View>
-    </Surface>
+    </EnhancedCard>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
-    borderRadius: 12,
+    borderRadius: 16,
     margin: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.lightGray,

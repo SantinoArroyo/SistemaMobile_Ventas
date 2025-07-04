@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Chip, Button, Text, Surface } from 'react-native-paper';
+import { Chip, Text } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, SHADOWS } from '../theme/colors';
 import { Product } from '../types';
+import EnhancedCard from './EnhancedCard';
+import EnhancedButton from './EnhancedButton';
 
 interface ProductFiltersProps {
   products: Product[];
@@ -36,17 +38,21 @@ export default function ProductFilters({
   ];
 
   return (
-    <Surface style={[styles.container, SHADOWS.small]} elevation={2}>
+    <EnhancedCard
+      variant="glass"
+      style={StyleSheet.flatten([styles.container, SHADOWS.small])}
+      icon="filter-list"
+      iconColor={COLORS.celeste}
+    >
       {/* Botón para mostrar/ocultar filtros */}
-      <Button
-        mode="outlined"
-        icon={showFilters ? 'chevron-up' : 'chevron-down'}
+      <EnhancedButton
+        title={`Filtros ${showFilters ? 'Ocultar' : 'Mostrar'}`}
+        icon={showFilters ? 'expand-less' : 'expand-more'}
         onPress={() => setShowFilters(!showFilters)}
+        variant="outline"
         style={styles.toggleButton}
-        labelStyle={styles.toggleButtonLabel}
-      >
-        Filtros {showFilters ? 'Ocultar' : 'Mostrar'}
-      </Button>
+        textStyle={styles.toggleButtonLabel}
+      />
 
       {showFilters && (
         <View style={styles.filtersContainer}>
@@ -128,19 +134,21 @@ export default function ProductFilters({
           </View>
         </View>
       )}
-    </Surface>
+    </EnhancedCard>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     margin: SPACING.md,
-    borderRadius: 12,
+    borderRadius: 16,
     backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.lightGray,
   },
   toggleButton: {
     borderColor: COLORS.celeste,
-    borderRadius: 8,
+    borderRadius: 12,
     margin: SPACING.md,
   },
   toggleButtonLabel: {
@@ -219,8 +227,8 @@ const styles = StyleSheet.create({
   activeFilterChip: {
     marginRight: SPACING.sm,
     marginBottom: SPACING.sm,
-    borderColor: COLORS.celeste,
     backgroundColor: COLORS.celesteLight,
+    borderColor: COLORS.celeste,
   },
   activeFilterChipText: {
     color: COLORS.celesteDark,

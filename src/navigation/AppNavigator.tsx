@@ -11,10 +11,12 @@ import SalesScreen from '../screens/SalesScreen';
 import StockScreen from '../screens/StockScreen';
 import ReportsScreen from '../screens/ReportsScreen';
 import StockMovementsHistoryScreen from '../screens/StockMovementsHistoryScreen';
+import NuevaVentaScreen from '../screens/NuevaVentaScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
 const StockStack = createNativeStackNavigator();
+const SalesStack = createNativeStackNavigator();
 
 function StockStackNavigator() {
   return (
@@ -22,6 +24,15 @@ function StockStackNavigator() {
       <StockStack.Screen name="StockMain" component={StockScreen} options={{ title: 'Stock' }} />
       <StockStack.Screen name="StockMovementsHistory" component={StockMovementsHistoryScreen} options={{ title: 'Historial de Movimientos' }} />
     </StockStack.Navigator>
+  );
+}
+
+function SalesStackNavigator() {
+  return (
+    <SalesStack.Navigator>
+      <SalesStack.Screen name="SalesMain" component={SalesScreen} options={{ title: 'Registro de Ventas' }} />
+      <SalesStack.Screen name="NuevaVenta" component={NuevaVentaScreen} options={{ title: 'Nueva Venta' }} />
+    </SalesStack.Navigator>
   );
 }
 
@@ -35,7 +46,7 @@ export default function AppNavigator() {
               let iconName: keyof typeof MaterialIcons.glyphMap;
 
               if (route.name === 'Productos') {
-                iconName = 'inventory-2';
+                iconName = 'inventory';
               } else if (route.name === 'Clientes') {
                 iconName = 'people-outline';
               } else if (route.name === 'Ventas') {
@@ -97,8 +108,8 @@ export default function AppNavigator() {
           />
           <Tab.Screen 
             name="Ventas" 
-            component={SalesScreen}
-            options={{ title: 'Registro de Ventas' }}
+            component={SalesStackNavigator}
+            options={{ title: 'Registro de Ventas', headerShown: false }}
           />
           <Tab.Screen 
             name="Stock" 

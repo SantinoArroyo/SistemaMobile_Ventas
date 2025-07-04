@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Card, Title, Paragraph, Surface } from 'react-native-paper';
+import { Title, Paragraph } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, SHADOWS } from '../theme/colors';
+import EnhancedCard from './EnhancedCard';
 
 interface DashboardCardProps {
   title: string;
@@ -27,46 +28,45 @@ export default function DashboardCard({
   onPress,
 }: DashboardCardProps) {
   return (
-    <Surface style={[styles.container, SHADOWS.medium]} elevation={3}>
-      <Card 
-        style={[styles.card, { borderLeftColor: color }]} 
-        mode="outlined"
-        onPress={onPress}
-        disabled={!onPress}
-      >
-        <Card.Content style={styles.content}>
-          <View style={styles.header}>
-            <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
-              <MaterialIcons name={icon} size={24} color={color} />
-            </View>
-            {trend && (
-              <View style={[
-                styles.trendContainer,
-                { backgroundColor: trend.isPositive ? COLORS.successLight : COLORS.errorLight }
-              ]}>
-                <MaterialIcons 
-                  name={trend.isPositive ? 'trending-up' : 'trending-down'} 
-                  size={16} 
-                  color={trend.isPositive ? COLORS.success : COLORS.error} 
-                />
-                <Paragraph style={[
-                  styles.trendText,
-                  { color: trend.isPositive ? COLORS.success : COLORS.error }
-                ]}>
-                  {trend.isPositive ? '+' : ''}{trend.value}%
-                </Paragraph>
-              </View>
-            )}
+    <EnhancedCard
+      variant="glass"
+      style={StyleSheet.flatten([styles.container, SHADOWS.medium])}
+      icon={icon}
+      iconColor={color}
+      onPress={onPress}
+    >
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
+            <MaterialIcons name={icon} size={24} color={color} />
           </View>
-          
-          <Title style={styles.value}>{value}</Title>
-          <Paragraph style={styles.title}>{title}</Paragraph>
-          {subtitle && (
-            <Paragraph style={styles.subtitle}>{subtitle}</Paragraph>
+          {trend && (
+            <View style={[
+              styles.trendContainer,
+              { backgroundColor: trend.isPositive ? COLORS.successLight : COLORS.errorLight }
+            ]}>
+              <MaterialIcons 
+                name={trend.isPositive ? 'trending-up' : 'trending-down'} 
+                size={16} 
+                color={trend.isPositive ? COLORS.success : COLORS.error} 
+              />
+              <Paragraph style={[
+                styles.trendText,
+                { color: trend.isPositive ? COLORS.success : COLORS.error }
+              ]}>
+                {trend.isPositive ? '+' : ''}{trend.value}%
+              </Paragraph>
+            </View>
           )}
-        </Card.Content>
-      </Card>
-    </Surface>
+        </View>
+        
+        <Title style={styles.value}>{value}</Title>
+        <Paragraph style={styles.title}>{title}</Paragraph>
+        {subtitle && (
+          <Paragraph style={styles.subtitle}>{subtitle}</Paragraph>
+        )}
+      </View>
+    </EnhancedCard>
   );
 }
 
@@ -74,14 +74,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: SPACING.xs,
-  },
-  card: {
     backgroundColor: COLORS.white,
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderTopWidth: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: COLORS.lightGray,
   },
   content: {
     padding: SPACING.md,

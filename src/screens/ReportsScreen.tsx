@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// Si no tienes instalado @react-native-picker/picker, instálalo con:
-// npm install @react-native-picker/picker
 import { Picker } from '@react-native-picker/picker';
 import {
   View,
@@ -21,11 +19,15 @@ import {
   List,
   Surface,
 } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchSales } from '../store/slices/salesSlice';
 import { fetchProducts } from '../store/slices/productsSlice';
 import { Sale, Product } from '../types';
-import { COLORS, SHADOWS } from '../theme/colors';
+import { COLORS, SHADOWS, SPACING, BORDER_RADIUS } from '../theme/colors';
+import StatsCard from '../components/StatsCard';
+import EnhancedCard from '../components/EnhancedCard';
+import GradientBackground from '../components/GradientBackground';
 
 export default function ReportsScreen() {
   const dispatch = useAppDispatch();
@@ -113,46 +115,61 @@ export default function ReportsScreen() {
 
   return (
     <PaperProvider>
-      <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <GradientBackground gradientType="royal" style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ paddingBottom: 32, paddingTop: 8 }} showsVerticalScrollIndicator={true}>
-          {/* Selector de mes */}
-          <Surface style={[styles.card, SHADOWS.card, { marginBottom: 8 }]} elevation={2}>
-            <Card.Content>
-              <Title style={styles.sectionTitle}>Seleccionar Mes</Title>
+          {/* Selector de mes mejorado */}
+          <EnhancedCard
+            variant="glass"
+            style={styles.monthSelector}
+            icon="calendar-today"
+            iconColor={COLORS.celeste}
+          >
+            <View style={styles.monthLabelRow}>
+              <MaterialIcons name="calendar-today" size={22} color={COLORS.celeste} style={{ marginRight: 8 }} />
+              <Title style={styles.monthLabel}>Seleccionar Mes</Title>
+            </View>
+            <View style={styles.pickerContainer}>
               <Picker
                 selectedValue={selectedMonth}
                 onValueChange={(itemValue: string) => setSelectedMonth(itemValue)}
-                style={{ width: '100%' }}
+                style={styles.picker}
                 mode="dropdown"
+                dropdownIconColor={COLORS.celeste}
               >
                 {availableMonths.map((month) => (
                   <Picker.Item key={String(month)} label={String(month)} value={String(month)} />
                 ))}
               </Picker>
-            </Card.Content>
-          </Surface>
+            </View>
+          </EnhancedCard>
 
-          {/* Resumen del Mes */}
-          <Surface style={[styles.summaryCard, SHADOWS.card]} elevation={3}>
-            <Card.Content>
-              <Title style={styles.summaryTitle}>Resumen del Mes</Title>
-              <Paragraph style={styles.summaryMonth}>Mes: {selectedMonth}</Paragraph>
-              <View style={styles.summaryGrid}>
-                <View style={styles.summaryItem}>
-                  <Title style={styles.summaryNumber}>{totalSales}</Title>
-                  <Paragraph>Ventas</Paragraph>
-                </View>
-                <View style={styles.summaryItem}>
-                  <Title style={styles.summaryNumber}>${totalAmount.toLocaleString('es-AR', { minimumFractionDigits: 2 })}</Title>
-                  <Paragraph>Total</Paragraph>
-                </View>
-                <View style={styles.summaryItem}>
-                  <Title style={styles.summaryNumber}>{uniqueCustomers}</Title>
-                  <Paragraph>Clientes</Paragraph>
-                </View>
-              </View>
-            </Card.Content>
-          </Surface>
+          {/* Resumen del Mes con Stats Cards */}
+          <View style={styles.statsGrid}>
+            <StatsCard
+              title="Ventas"
+              value={totalSales}
+              subtitle={`Mes: ${selectedMonth}`}
+              icon="point-of-sale"
+              gradientType="success"
+              variant="gradient"
+            />
+            <StatsCard
+              title="Total"
+              value={`$${totalAmount.toLocaleString('es-AR', { minimumFractionDigits: 2 })}`}
+              subtitle="Ingresos"
+              icon="attach-money"
+              gradientType="sunset"
+              variant="gradient"
+            />
+            <StatsCard
+              title="Clientes"
+              value={uniqueCustomers}
+              subtitle="Únicos"
+              icon="people"
+              gradientType="ocean"
+              variant="gradient"
+            />
+          </View>
 
           {/* Productos Más Vendidos */}
           <Surface style={[styles.card, SHADOWS.card]} elevation={3}>
@@ -216,7 +233,7 @@ export default function ReportsScreen() {
             </Card.Content>
           </Surface>
         </ScrollView>
-      </View>
+      </GradientBackground>
     </PaperProvider>
   );
 }
@@ -224,7 +241,47 @@ export default function ReportsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  monthSelector: {
+    margin: 16,
+    padding: 0,
+  },
+  monthLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    marginLeft: 4,
+  },
+  monthLabel: {
+    color: COLORS.celesteDark,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  pickerContainer: {
     backgroundColor: COLORS.white,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: COLORS.celeste,
+    shadowColor: COLORS.celeste,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+    paddingHorizontal: 12,
+    paddingVertical: 2,
+    marginBottom: 4,
+  },
+  picker: {
+    color: COLORS.celesteDark,
+    fontSize: 17,
+    minHeight: 36,
+    width: '100%',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 16,
+    marginBottom: 16,
   },
   summaryCard: {
     margin: 16,

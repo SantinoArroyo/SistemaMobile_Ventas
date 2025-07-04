@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Card, Title, Paragraph, Chip, Surface, Divider } from 'react-native-paper';
+import { Title, Paragraph, Chip, Divider } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, SHADOWS, TYPOGRAPHY } from '../theme/colors';
 import { SaleItem, Customer } from '../types';
+import EnhancedCard from './EnhancedCard';
 
 interface SaleSummaryProps {
   customer: Customer | null;
@@ -23,24 +24,31 @@ export default function SaleSummary({
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <Surface style={[styles.container, SHADOWS.medium]} elevation={4}>
+    <EnhancedCard
+      variant="glass"
+      style={StyleSheet.flatten([styles.container, SHADOWS.medium])}
+      icon="shopping-cart"
+      iconColor={COLORS.celeste}
+    >
       {/* Header del resumen */}
       <View style={styles.header}>
-        <MaterialIcons name="shopping-cart" size={24} color={COLORS.celeste} />
         <Title style={styles.headerTitle}>Resumen de Venta</Title>
       </View>
 
       {/* Información del cliente */}
       {customer && (
-        <Card style={styles.customerCard}>
-          <Card.Content>
-            <Title style={styles.customerName}>{customer.name}</Title>
-            <Paragraph style={styles.customerCuil}>CUIL: {customer.cuil}</Paragraph>
-            {customer.phone && (
-              <Paragraph style={styles.customerInfo}>📞 {customer.phone}</Paragraph>
-            )}
-          </Card.Content>
-        </Card>
+        <EnhancedCard
+          variant="glass"
+          style={styles.customerCard}
+          icon="person"
+          iconColor={COLORS.celeste}
+        >
+          <Title style={styles.customerName}>{customer.name}</Title>
+          <Paragraph style={styles.customerCuil}>CUIL: {customer.cuil}</Paragraph>
+          {customer.phone && (
+            <Paragraph style={styles.customerInfo}>📞 {customer.phone}</Paragraph>
+          )}
+        </EnhancedCard>
       )}
 
       {/* Lista de productos */}
@@ -56,39 +64,43 @@ export default function SaleSummary({
             </View>
           ) : (
             items.map((item) => (
-              <Card key={item.id} style={styles.itemCard}>
-                <Card.Content>
-                  <View style={styles.itemHeader}>
-                    <Title style={styles.itemName}>{item.productName}</Title>
-                    <MaterialIcons
-                      name="delete"
-                      size={20}
-                      color={COLORS.error}
-                      onPress={() => onRemoveItem(item.id)}
-                      style={styles.deleteIcon}
-                    />
+              <EnhancedCard
+                key={item.id}
+                variant="glass"
+                style={styles.itemCard}
+                icon="inventory"
+                iconColor={COLORS.celeste}
+              >
+                <View style={styles.itemHeader}>
+                  <Title style={styles.itemName}>{item.productName}</Title>
+                  <MaterialIcons
+                    name="delete"
+                    size={20}
+                    color={COLORS.error}
+                    onPress={() => onRemoveItem(item.id)}
+                    style={styles.deleteIcon}
+                  />
+                </View>
+                <View style={styles.itemDetails}>
+                  <View style={styles.itemInfo}>
+                    <Paragraph style={styles.itemPrice}>
+                      ${item.unitPrice} c/u
+                    </Paragraph>
+                    <Paragraph style={styles.itemTotal}>
+                      Total: ${item.total}
+                    </Paragraph>
                   </View>
-                  <View style={styles.itemDetails}>
-                    <View style={styles.itemInfo}>
-                      <Paragraph style={styles.itemPrice}>
-                        ${item.unitPrice} c/u
-                      </Paragraph>
-                      <Paragraph style={styles.itemTotal}>
-                        Total: ${item.total}
-                      </Paragraph>
-                    </View>
-                    <View style={styles.quantityContainer}>
-                      <Chip
-                        mode="outlined"
-                        style={styles.quantityChip}
-                        textStyle={styles.quantityText}
-                      >
-                        Cantidad: {item.quantity}
-                      </Chip>
-                    </View>
+                  <View style={styles.quantityContainer}>
+                    <Chip
+                      mode="outlined"
+                      style={styles.quantityChip}
+                      textStyle={styles.quantityText}
+                    >
+                      Cantidad: {item.quantity}
+                    </Chip>
                   </View>
-                </Card.Content>
-              </Card>
+                </View>
+              </EnhancedCard>
             ))
           )}
         </ScrollView>
@@ -114,16 +126,18 @@ export default function SaleSummary({
           </View>
         </>
       )}
-    </Surface>
+    </EnhancedCard>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
-    borderRadius: 12,
+    borderRadius: 16,
     margin: SPACING.md,
     maxHeight: 400,
+    borderWidth: 1,
+    borderColor: COLORS.lightGray,
   },
   header: {
     flexDirection: 'row',
@@ -143,6 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.celesteLight,
     borderColor: COLORS.celeste,
     borderWidth: 1,
+    borderRadius: 12,
   },
   customerName: {
     color: COLORS.celesteDark,
@@ -185,6 +200,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGray,
     borderWidth: 1,
     borderColor: COLORS.lightGray,
+    borderRadius: 12,
   },
   itemHeader: {
     flexDirection: 'row',
@@ -214,7 +230,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   itemTotal: {
-    color: COLORS.success,
+    color: COLORS.celesteDark,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -222,21 +238,22 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   quantityChip: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.celesteLight,
     borderColor: COLORS.celeste,
   },
   quantityText: {
     color: COLORS.celesteDark,
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   divider: {
-    marginHorizontal: SPACING.md,
-    backgroundColor: COLORS.lightGray,
+    marginVertical: SPACING.md,
   },
   totalSection: {
     padding: SPACING.md,
     backgroundColor: COLORS.lightGray,
+    borderRadius: 12,
+    margin: SPACING.md,
   },
   totalRow: {
     flexDirection: 'row',
@@ -250,7 +267,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   totalAmount: {
-    color: COLORS.success,
+    color: COLORS.naranjaDark,
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -261,7 +278,7 @@ const styles = StyleSheet.create({
   subtotalAmount: {
     color: COLORS.darkGray,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   ivaLabel: {
     color: COLORS.gray,
@@ -270,6 +287,6 @@ const styles = StyleSheet.create({
   ivaAmount: {
     color: COLORS.darkGray,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
   },
 }); 

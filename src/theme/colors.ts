@@ -38,12 +38,43 @@ export const COLORS = {
   infoDark: '#1976d2',
   infoLight: '#bbdefb',
   
-  // Gradientes
+  // Nuevos colores para mejoras visuales
+  purple: '#9c27b0',
+  purpleDark: '#7b1fa2',
+  purpleLight: '#e1bee7',
+  
+  teal: '#009688',
+  tealDark: '#00796b',
+  tealLight: '#b2dfdb',
+  
+  indigo: '#3f51b5',
+  indigoDark: '#303f9f',
+  indigoLight: '#c5cae9',
+  
+  pink: '#e91e63',
+  pinkDark: '#c2185b',
+  pinkLight: '#f8bbd9',
+  
+  amber: '#ffc107',
+  amberDark: '#ff8f00',
+  amberLight: '#ffecb3',
+  
+  // Gradientes modernos
   primaryGradient: ['#00bcd4', '#0097a7'],
   secondaryGradient: ['#ff9800', '#f57c00'],
   successGradient: ['#4caf50', '#388e3c'],
   warningGradient: ['#ff9800', '#f57c00'],
   errorGradient: ['#f44336', '#d32f2f'],
+  
+  // Nuevos gradientes atractivos
+  sunsetGradient: ['#ff6b6b', '#ffa726'],
+  oceanGradient: ['#00bcd4', '#2196f3'],
+  forestGradient: ['#4caf50', '#8bc34a'],
+  royalGradient: ['#9c27b0', '#3f51b5'],
+  fireGradient: ['#ff5722', '#ff9800'],
+  coolGradient: ['#00bcd4', '#009688'],
+  warmGradient: ['#ff9800', '#ff5722'],
+  calmGradient: ['#2196f3', '#00bcd4'],
   
   // Estados de stock
   stockNormal: '#4caf50',
@@ -78,7 +109,7 @@ export const DARK_THEME = {
   placeholder: '#888888',
 };
 
-// Sombras para efecto 3D
+// Sombras para efecto 3D mejoradas
 export const SHADOWS = {
   small: {
     shadowColor: COLORS.black,
@@ -128,6 +159,28 @@ export const SHADOWS = {
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+  },
+  // Nuevas sombras para efectos más dramáticos
+  glow: {
+    shadowColor: COLORS.celeste,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 8,
+  },
+  depth: {
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 10,
+  },
+  soft: {
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
 };
 
@@ -180,5 +233,59 @@ export const TYPOGRAPHY = {
   caption: {
     fontSize: 12,
     fontWeight: 'normal',
+  },
+};
+
+// Efectos visuales adicionales
+export const EFFECTS = {
+  // Gradientes lineales
+  gradients: {
+    primary: ['#00bcd4', '#0097a7'],
+    secondary: ['#ff9800', '#f57c00'],
+    success: ['#4caf50', '#388e3c'],
+    warning: ['#ff9800', '#f57c00'],
+    error: ['#f44336', '#d32f2f'],
+    sunset: ['#ff6b6b', '#ffa726'],
+    ocean: ['#00bcd4', '#2196f3'],
+    forest: ['#4caf50', '#8bc34a'],
+    royal: ['#9c27b0', '#3f51b5'],
+    fire: ['#ff5722', '#ff9800'],
+    cool: ['#00bcd4', '#009688'],
+    warm: ['#ff9800', '#ff5722'],
+    calm: ['#2196f3', '#00bcd4'],
+  },
+  
+  // Bordes con gradientes
+  borderGradients: {
+    primary: ['#00bcd4', '#0097a7'],
+    success: ['#4caf50', '#388e3c'],
+    warning: ['#ff9800', '#f57c00'],
+    error: ['#f44336', '#d32f2f'],
+  },
+  
+  // Efectos de glassmorphism
+  glass: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backdropFilter: 'blur(10px)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  
+  // Efectos de neumorphism
+  neumorphism: {
+    light: {
+      shadowColor: COLORS.white,
+      shadowOffset: { width: -2, height: -2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 4,
+      elevation: 4,
+    },
+    dark: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 2, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 4,
+    },
   },
 }; 

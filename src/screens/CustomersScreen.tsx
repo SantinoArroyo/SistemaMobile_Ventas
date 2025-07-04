@@ -4,14 +4,13 @@ import {
   StyleSheet,
   FlatList,
   Alert,
+  Pressable,
+  Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  Surface,
-  Card,
   Title,
   Paragraph,
-  Button,
   FAB,
   Portal,
   Modal,
@@ -19,10 +18,14 @@ import {
   Provider as PaperProvider,
   Searchbar,
 } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { fetchCustomers, addCustomer, updateCustomer, deleteCustomer } from '../store/slices/customersSlice';
 import { Customer } from '../types';
-import { COLORS, SHADOWS } from '../theme/colors';
+import { COLORS, SHADOWS, SPACING, BORDER_RADIUS } from '../theme/colors';
+import EnhancedCard from '../components/EnhancedCard';
+import EnhancedButton from '../components/EnhancedButton';
+import GradientBackground from '../components/GradientBackground';
 
 export default function CustomersScreen() {
   const dispatch = useAppDispatch();
@@ -117,29 +120,35 @@ export default function CustomersScreen() {
   };
 
   const renderCustomer = ({ item }: { item: Customer }) => (
-    <Surface style={[styles.customerCard, SHADOWS.card]} elevation={3}>
-      <Card.Content style={styles.cardContent}>
+    <EnhancedCard
+      variant="glass"
+      style={styles.customerCard}
+      icon="person"
+      iconColor={COLORS.celeste}
+    >
+      <View style={styles.customerContent}>
         <Title style={styles.customerTitle}>{item.name}</Title>
         <Paragraph style={styles.customerCuil}>CUIL: {item.cuil}</Paragraph>
-        {item.phone && <Paragraph style={styles.customerInfo}>Teléfono: {item.phone}</Paragraph>}
-        {item.email && <Paragraph style={styles.customerInfo}>Email: {item.email}</Paragraph>}
-        {item.address && <Paragraph style={styles.customerInfo}>Dirección: {item.address}</Paragraph>}
-      </Card.Content>
-      <Card.Actions style={styles.cardActions}>
-        <Button mode="outlined" onPress={() => handleEditCustomer(item)} style={[styles.editButton, SHADOWS.button]} labelStyle={styles.editButtonLabel}>Editar</Button>
-        <Button mode="contained" onPress={() => handleDeleteCustomer(item)} style={[styles.deleteButton, SHADOWS.button]} labelStyle={styles.buttonLabel}>Eliminar</Button>
-      </Card.Actions>
-    </Surface>
+        {item.phone && <Paragraph style={styles.customerInfo}><MaterialIcons name="phone" size={16} color={COLORS.celeste} /> {item.phone}</Paragraph>}
+        {item.email && <Paragraph style={styles.customerInfo}><MaterialIcons name="email" size={16} color={COLORS.celeste} /> {item.email}</Paragraph>}
+        {item.address && <Paragraph style={styles.customerInfo}><MaterialIcons name="location-on" size={16} color={COLORS.celeste} /> {item.address}</Paragraph>}
+        <View style={styles.customerActions}>
+          <EnhancedButton title="Editar" onPress={() => handleEditCustomer(item)} variant="outline" size="small" icon="edit" style={styles.actionButton} />
+          <EnhancedButton title="Eliminar" onPress={() => handleDeleteCustomer(item)} variant="error" size="small" icon="delete" style={styles.actionButton} />
+        </View>
+      </View>
+    </EnhancedCard>
   );
 
   return (
     <PaperProvider>
-      <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <GradientBackground gradientType="ocean" style={{ flex: 1 }}>
+        <View style={styles.container}>
           <Searchbar
             placeholder="Buscar clientes..."
             onChangeText={setSearchQuery}
             value={searchQuery}
-            style={[styles.searchbar, SHADOWS.medium]}
+            style={[styles.searchbar, SHADOWS.depth]}
             iconColor={COLORS.celeste}
             inputStyle={styles.searchInput}
           />
@@ -156,9 +165,9 @@ export default function CustomersScreen() {
             <Modal
               visible={modalVisible}
               onDismiss={() => setModalVisible(false)}
-              contentContainerStyle={styles.modal}
+              contentContainerStyle={[styles.modal, { minWidth: 320, minHeight: 320 }]}
             >
-              <Surface style={[styles.modalSurface, SHADOWS.modal]} elevation={4}>
+              <View style={[styles.modalSurface, SHADOWS.modal]}>
                 <Title style={styles.modalTitle}>{editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente'}</Title>
                 <TextInput
                   label="Nombre *"
@@ -209,10 +218,38 @@ export default function CustomersScreen() {
                   activeOutlineColor={COLORS.celesteDark}
                 />
                 <View style={styles.modalActions}>
-                  <Button mode="outlined" onPress={() => setModalVisible(false)} style={[styles.cancelButton, SHADOWS.button]} labelStyle={styles.cancelButtonLabel}>Cancelar</Button>
-                  <Button mode="contained" onPress={handleSaveCustomer} style={[styles.saveButton, SHADOWS.button]} labelStyle={styles.buttonLabel}>Guardar</Button>
+                  <Pressable
+                    onPress={() => setModalVisible(false)}
+                    style={{
+                      backgroundColor: COLORS.white,
+                      borderColor: COLORS.celeste,
+                      borderWidth: 2,
+                      borderRadius: 12,
+                      paddingVertical: 14,
+                      paddingHorizontal: 32,
+                      flex: 1,
+                      marginRight: 8,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text style={{ color: COLORS.celesteDark, fontWeight: 'bold', fontSize: 18 }}>Cancelar</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleSaveCustomer}
+                    style={{
+                      backgroundColor: COLORS.celeste,
+                      borderRadius: 12,
+                      paddingVertical: 14,
+                      paddingHorizontal: 32,
+                      flex: 1,
+                      marginLeft: 8,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text style={{ color: COLORS.white, fontWeight: 'bold', fontSize: 18 }}>Guardar</Text>
+                  </Pressable>
                 </View>
-              </Surface>
+              </View>
             </Modal>
           </Portal>
           <FAB
@@ -221,7 +258,8 @@ export default function CustomersScreen() {
             onPress={handleAddCustomer}
             color={COLORS.white}
           />
-      </View>
+        </View>
+      </GradientBackground>
     </PaperProvider>
   );
 }
@@ -229,12 +267,12 @@ export default function CustomersScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
   },
   searchbar: {
     margin: 16,
     backgroundColor: COLORS.white,
-    borderRadius: 12,
+    borderRadius: 16,
+    elevation: 3,
   },
   searchInput: {
     color: COLORS.darkGray,
@@ -244,51 +282,37 @@ const styles = StyleSheet.create({
   },
   customerCard: {
     marginBottom: 16,
-    borderRadius: 12,
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.lightGray,
+    borderRadius: BORDER_RADIUS.xxl,
   },
-  cardContent: {
-    padding: 16,
+  customerContent: {
+    paddingHorizontal: 4,
   },
   customerTitle: {
     color: COLORS.celesteDark,
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   customerCuil: {
     color: COLORS.gray,
     fontSize: 14,
-    marginBottom: 4,
-  },
-  customerInfo: {
-    color: COLORS.gray,
-    fontSize: 13,
     marginBottom: 2,
   },
-  cardActions: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    justifyContent: 'space-between',
-  },
-  editButton: {
-    borderColor: COLORS.celeste,
-    borderRadius: 8,
-  },
-  editButtonLabel: {
-    color: COLORS.celeste,
-    fontWeight: '600',
-  },
-  deleteButton: {
-    backgroundColor: COLORS.rojizo,
-    borderRadius: 8,
-  },
-  buttonLabel: {
-    color: COLORS.white,
-    fontWeight: '600',
+  customerInfo: {
+    color: COLORS.darkGray,
     fontSize: 14,
+    marginBottom: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  customerActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    gap: SPACING.sm,
+  },
+  actionButton: {
+    flex: 1,
   },
   fab: {
     position: 'absolute',
@@ -311,30 +335,38 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   input: {
-    marginBottom: 16,
+    marginBottom: 12,
     backgroundColor: COLORS.white,
   },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
-    gap: 12,
+    marginTop: 16,
+    marginBottom: 8,
   },
   cancelButton: {
-    flex: 1,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.celeste,
+    borderWidth: 1,
     borderRadius: 8,
+    backgroundColor: COLORS.white,
+    flex: 1,
+    marginRight: 8,
   },
   cancelButtonLabel: {
-    color: COLORS.gray,
-    fontWeight: '600',
+    color: COLORS.celesteDark,
+    fontWeight: 'bold',
   },
   saveButton: {
-    flex: 1,
     backgroundColor: COLORS.celeste,
     borderRadius: 8,
+    flex: 1,
+    marginLeft: 8,
+  },
+  buttonLabel: {
+    color: COLORS.white,
+    fontWeight: 'bold',
   },
 }); 
